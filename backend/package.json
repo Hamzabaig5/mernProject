@@ -18,6 +18,8 @@
     "jsonwebtoken": "^9.0.0",
     "mongoose": "^7.1.2",
     "moongoose": "^0.0.5",
-    "nodemon": "^2.0.22"
+    "nodemailer": "^6.9.2",
+    "nodemon": "^2.0.22",
+    "twilio": "^4.11.1"
   }
 }

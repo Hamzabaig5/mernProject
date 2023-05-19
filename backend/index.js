@@ -13,7 +13,7 @@ app.get('/', (req, res) => res.send('API Running'));
 // Define Routes
 app.use('/api/users', require('./routes/api/users'));
 app.use('/api/reservations', require('./routes/api/reservations'));
-app.use('/api/loyaltyPoints', require('./routes/api/loyaltyPoints'));
+//app.use('/api/loyaltyPoints', require('./routes/api/loyaltyPoints'));
 const PORT = process.env.PORT || 5000;
 
 app.listen(PORT, () => console.log(`Server started on port ${PORT}`));
