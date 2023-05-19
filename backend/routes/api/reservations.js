@@ -1,3 +1,4 @@
+const NotificationService = require('../../services/NotificationService');
 const express = require('express');
 const router = express.Router();
 
@@ -16,6 +17,20 @@ router.post('/', async (req, res) => {
     });
 
     await reservation.save();
+
+    // Send confirmation email using SendGrid
+    NotificationService.sendEmail(
+      user.email,
+      'Reservation Confirmation',
+      'Your reservation has been confirmed.'
+    );
+
+    // Send SMS using Twilio
+    NotificationService.sendSMS(
+      user.phone,
+      'Your reservation has been confirmed.'
+    );
+
     res.json(reservation);
   } catch (err) {
     console.error(err.message);
