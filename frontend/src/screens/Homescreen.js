@@ -23,7 +23,7 @@ function Homescreen() {
       _id: {
         $oid: '6110ae308adb7a0ec49450ca',
       },
-      name: 'Four star hotel in Lahore pakistan ',
+      name: 'SPOT ON 37669 Hotel Shiva Sai Lodge Near Regimental Bazaar, Shivaji Nagar, Hyderabad',
       imageurls: [
         'https://images.oyoroomscdn.com/uploads/hotel_image/56303/medium/597f0e48823f8885.jpg',
         'https://images.oyoroomscdn.com/uploads/hotel_image/56303/medium/06883e94ec59702e.jpg',
@@ -34,7 +34,8 @@ function Homescreen() {
       maxcount: 3,
       phonenumber: 9989649278,
       currentbookings: [],
-      description: '5 star in Islamabad',
+      description:
+        'Hotel Shiva Sai Lodge is a furnished and modest property located in Regimental Bazaar, Shivaji Nagar, Secunderabad, Telangana.The property is in close vicinity to multiple tourist spots namely Sanjeeviah Park, Buddha Statue, Snow World, and Birla Science Museum.',
       __v: 7,
       createdAt: {
         $date: '2021-08-13T14:30:08.884Z',
@@ -47,7 +48,7 @@ function Homescreen() {
       _id: {
         $oid: '6110ae308adb7a0ec49450cb',
       },
-      name: 'Rifa Hotel in Rawlpindi ',
+      name: 'OYO Flagship 75243 Metro International',
       imageurls: [
         'https://images.oyoroomscdn.com/uploads/hotel_image/105649/large/8e80e24a5496eb80.jpg',
         'https://images.oyoroomscdn.com/uploads/hotel_image/105649/large/caef038a4b97b589.jpg',
@@ -65,7 +66,7 @@ function Homescreen() {
       _id: {
         $oid: '6110ae308adb7a0ec49450cc',
       },
-      name: 'kotlakhpat hotel ',
+      name: 'OYO FLAGSHIP 76687 Ramoji Kothapet',
       imageurls: [
         'https://images.oyoroomscdn.com/uploads/hotel_image/107625/large/4488071a59d38cc5.jpg',
         'https://images.oyoroomscdn.com/uploads/hotel_image/107625/large/d452b4897a767f6b.jpg',
@@ -83,7 +84,7 @@ function Homescreen() {
       _id: {
         $oid: '6110ae308adb7a0ec49450cd',
       },
-      name: 'Sariena adiala hotel',
+      name: 'OYO 80211 Collection O Sri Navya Grand',
       imageurls: [
         'https://images.oyoroomscdn.com/uploads/hotel_image/111796/large/e225bbf160a11c02.jpg',
         'https://images.oyoroomscdn.com/uploads/hotel_image/111796/large/d55361043c9b52af.jpg',
@@ -101,7 +102,7 @@ function Homescreen() {
       _id: {
         $oid: '6110ae308adb7a0ec49450ce',
       },
-      name: 'Capital ',
+      name: 'Capital O 15959 The City Park',
       imageurls: [
         'https://images.oyoroomscdn.com/uploads/hotel_image/38668/large/414e401312ad45a7.jpg',
         'https://images.oyoroomscdn.com/uploads/hotel_image/38668/large/d24b920cfdddeecb.jpg',
@@ -134,14 +135,15 @@ function Homescreen() {
         setLoading(true);
         const response = await axios.get('/api/rooms/getallrooms');
         const data = response.data;
+
         console.log('fetching all rooms data');
         console.log(data);
-        const allRooms = [...data, ...hardcodedata];
-        setRooms(allRooms);
-        setDuplicateRooms(allRooms);
+        setRooms(data);
+        setDuplicateRooms(data);
       } catch (error) {
         console.log(error);
         setError('Something went wrong. Loading hardcoded data...');
+        // Use hardcoded data when API fetching fails
         setRooms(hardcodedata);
         setDuplicateRooms(hardcodedata);
       }
