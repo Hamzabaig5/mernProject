@@ -13,7 +13,7 @@ const NotificationService = require('../../services/NotificationService');
 // @desc    Register user
 // @access  Public
 router.post(
-  '/',
+  '/signup',
   [
     check('name', 'Name is required').not().isEmpty(),
     check('email', 'Please include a valid email').isEmail(),
