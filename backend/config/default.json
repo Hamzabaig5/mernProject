@@ -1,4 +1,0 @@
-{
-  "mongoURI": "mongodb+srv://wajahat:wajahat@cluster0.olgg7hg.mongodb.net/HotelManagementSystem?retryWrites=true&w=majority",
-  "jwtSecret": "1234567"
-}
