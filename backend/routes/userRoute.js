@@ -1,20 +1,24 @@
-const express = require("express");
+const express = require('express');
 const router = express.Router();
+const NotificationService = require('../services/NotificationService');
+const User = require('../models/user');
 
-const User = require("../models/user");
-
-router.post("/register", async (req, res) => {
+router.post('/register', async (req, res) => {
   try {
     const newUser = new User(req.body);
     const user = await newUser.save();
-
-    res.send("User Registered Successfully");
+    NotificationService.sendEmail(
+      user.email,
+      'Welcome ',
+      'You are welcome to Mern Hotel Management'
+    );
+    res.send('User Registered Successfully');
   } catch (error) {
     return res.status(400).json({ message: error });
   }
 });
 
-router.post("/login", async (req, res) => {
+router.post('/login', async (req, res) => {
   try {
     const { email, password } = req.body;
     const user = await User.findOne({ email: email, password: password });
@@ -27,14 +31,14 @@ router.post("/login", async (req, res) => {
       };
       res.send(temp);
     } else {
-      return res.status(400).json({ message: "Login Failed" });
+      return res.status(400).json({ message: 'Login Failed' });
     }
   } catch (error) {
     return res.status(400).json({ message: error });
   }
 });
 
-router.post("/getallusers", async (req, res) => {
+router.post('/getallusers', async (req, res) => {
   try {
     const users = await User.find();
     res.send(users);
