@@ -48,4 +48,21 @@ router.post('/getallusers', async (req, res) => {
   }
 });
 
+router.post('/updateprofile', async (req, res) => {
+  const { name, email, userId } = req.body;
+  try {
+    const user = await User.findOne({ _id: userId });
+    if (user) {
+      user.name = name;
+      user.email = email;
+      const updatedUser = await user.save();
+      res.send(updatedUser);
+    } else {
+      res.status(400).send('User not found');
+    }
+  } catch (error) {
+    return res.status(400).json({ message: error });
+  }
+});
+
 module.exports = router;

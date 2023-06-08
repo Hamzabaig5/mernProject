@@ -1,51 +1,58 @@
-import React, { useState, useEffect } from "react";
-import { Tabs } from "antd";
-import { Tag } from "antd";
+import React, { useState } from 'react';
+import { useEffect } from 'react';
+import axios from 'axios';
 
-import MyBookingScreen from "./MyBookingScreen";
-const { TabPane } = Tabs;
+function UpdateProfileScreen() {
+  const [name, setName] = useState('');
+  const [email, setEmail] = useState('');
 
-function ProfileScreen() {
-  const user = JSON.parse(localStorage.getItem("currentUser"));
+  const user = JSON.parse(localStorage.getItem('currentUser'));
 
   useEffect(() => {
     if (!user) {
-      window.location.href = "/login";
+      window.location.href = '/login';
+    } else {
+      setName(user.name);
+      setEmail(user.email);
     }
   }, []);
 
-  function callback(key) {
-    console.log(key);
-  }
+  const updateProfileHandler = async () => {
+    try {
+      const updatedUser = await axios.post(
+        'http://localhost:5000/updateprofile',
+        {
+          name,
+          email,
+          userId: user._id,
+        }
+      );
+      localStorage.setItem('currentUser', JSON.stringify(updatedUser.data));
+      window.location.href = '/profile';
+    } catch (error) {
+      console.log(error);
+      alert('Error updating profile');
+    }
+  };
 
   return (
     <div className="ml-3 mt-3">
-      <Tabs defaultActiveKey="1" onChange={callback}>
-        <TabPane tab="Profile" key="1">
-          <div className="row">
-            <div className="col-xs-12 ml-5 mb-5">
-              <div className="bs">
-                <p>My Profile</p>
-                <p>Name : {user.name}</p>
-                <p>Email : {user.email}</p>
-                <p>
-                  IsAdmin :{" "}
-                  {user.isAdmin ? (
-                    <Tag color="green">YES</Tag>
-                  ) : (
-                    <Tag color="red">NO</Tag>
-                  )}
-                </p>
-              </div>
-            </div>
-          </div>
-        </TabPane>
-        <TabPane tab="Booking" key="2">
-          <MyBookingScreen></MyBookingScreen>
-        </TabPane>
-      </Tabs>
+      <h1>Update Profile</h1>
+      <input
+        type="text"
+        value={name}
+        onChange={(e) => setName(e.target.value)}
+        placeholder="Name"
+      />
+      <input
+        type="email"
+        value={email}
+        onChange={(e) => setEmail(e.target.value)}
+        placeholder="Email"
+      />
+      <button onClick={updateProfileHandler}>Update</button>
     </div>
   );
 }
 
-export default ProfileScreen;
+export default UpdateProfileScreen;

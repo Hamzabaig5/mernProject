@@ -1,11 +1,11 @@
-import React from "react";
+import React from 'react';
 
 function Navbar() {
-  const user = JSON.parse(localStorage.getItem("currentUser"));
+  const user = JSON.parse(localStorage.getItem('currentUser'));
 
   function Logout() {
-    localStorage.removeItem("currentUser");
-    window.location.href = "/login";
+    localStorage.removeItem('currentUser');
+    window.location.href = '/login';
   }
 
   const navAction = () => {
@@ -70,7 +70,7 @@ function Navbar() {
           aria-label="Toggle navigation"
         >
           <span className="navbar-toggler-icon">
-            <i class="fas fa-bars" style={{ color: "white" }}></i>
+            <i class="fas fa-bars" style={{ color: 'white' }}></i>
           </span>
         </button>
 
