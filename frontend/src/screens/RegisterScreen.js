@@ -12,43 +12,51 @@ function RegisterScreen() {
   const [cpassword, setCpassword] = useState('');
 
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState('');
+  const [errors, setErrors] = useState([]);
   const [success, setSuccess] = useState('');
 
   const validateEmail = () => {
-    // Simple email format check
-    const emailPattern = /^\S+@\S+\.\S+$/;
+    const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     return emailPattern.test(email);
   };
 
   const validatePassword = () => {
-    // Simple password length check
     return password.length >= 6;
   };
 
   const validateConfirmPassword = () => {
-    // Check if password and confirm password match
     return password === cpassword;
+  };
+
+  const validateName = () => {
+    const namePattern = /^[A-Za-z]+$/;
+    return namePattern.test(name);
   };
 
   const handleRegister = async () => {
     setLoading(true);
+    setErrors([]);
 
-    // Perform validation checks
+    const inputErrors = [];
+
     if (!validateEmail()) {
-      setError('Invalid email format');
-      setLoading(false);
-      return;
+      inputErrors.push('Invalid email format');
     }
 
     if (!validatePassword()) {
-      setError('Password should be at least 6 characters long');
-      setLoading(false);
-      return;
+      inputErrors.push('Password should be at least 6 characters long');
     }
 
     if (!validateConfirmPassword()) {
-      setError('Password and confirm password do not match');
+      inputErrors.push('Password and confirm password do not match');
+    }
+
+    if (!validateName()) {
+      inputErrors.push('Name should contain only alphabetic characters');
+    }
+
+    if (inputErrors.length > 0) {
+      setErrors(inputErrors);
       setLoading(false);
       return;
     }
@@ -63,14 +71,15 @@ function RegisterScreen() {
     try {
       const result = (await axios.post('/api/users/register', user)).data;
       console.log(result);
-      setSuccess(result);
+
       setName('');
       setEmail('');
       setPassword('');
       setCpassword('');
+      setSuccess(result);
     } catch (error) {
       console.log(error);
-      setError(error);
+      setErrors([error.message]);
     }
 
     setLoading(false);
@@ -79,7 +88,13 @@ function RegisterScreen() {
   return (
     <div>
       {loading && <Loader />}
-      {error.length > 0 && <Error msg={error} />}
+      {errors.length > 0 && (
+        <Error>
+          {errors.map((error, index) => (
+            <div key={index}>{error}</div>
+          ))}
+        </Error>
+      )}
 
       <div className="row justify-content-center mt-5">
         <div className="col-md-5 mt-5">
@@ -88,44 +103,65 @@ function RegisterScreen() {
             <h2>Register</h2>
             <input
               type="text"
-              className="form-control"
+              className={`form-control ${
+                name && !validateName() ? 'is-invalid' : ''
+              }`}
               placeholder="Name"
               value={name}
               onChange={(e) => setName(e.target.value)}
             />
+            {!validateName() && (
+              <div className="invalid-feedback">
+                Name should contain only alphabetic characters
+              </div>
+            )}
             <input
               type="text"
-              className="form-control"
+              className={`form-control ${
+                email && !validateEmail() ? 'is-invalid' : ''
+              }`}
               placeholder="Email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
             />
+            {!validateEmail() && (
+              <div className="invalid-feedback">Invalid email format</div>
+            )}
             <input
               type="password"
-              className="form-control"
+              className={`form-control ${
+                password && !validatePassword() ? 'is-invalid' : ''
+              }`}
               placeholder="Password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
             />
+            {!validatePassword() && (
+              <div className="invalid-feedback">
+                Password should be at least 6 characters long
+              </div>
+            )}
             <input
               type="password"
-              className="form-control"
+              className={`form-control ${
+                cpassword && !validateConfirmPassword() ? 'is-invalid' : ''
+              }`}
               placeholder="Confirm Password"
               value={cpassword}
               onChange={(e) => setCpassword(e.target.value)}
             />
+            {!validateConfirmPassword() && (
+              <div className="invalid-feedback">
+                Password and confirm password do not match
+              </div>
+            )}
             {loading ? (
               <div>Registering... Please Wait...</div>
             ) : (
               <button
                 className="btn btn-primary mt-3"
                 onClick={handleRegister}
-                disabled={
-                  !validateEmail() ||
-                  !validatePassword() ||
-                  !validateConfirmPassword() ||
-                  loading
-                }
+                disabled={loading}
               >
                 Register
               </button>

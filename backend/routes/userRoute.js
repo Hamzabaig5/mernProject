@@ -5,13 +5,21 @@ const User = require('../models/user');
 
 router.post('/register', async (req, res) => {
   try {
-    const newUser = new User(req.body);
+    const { name, email, password } = req.body;
+
+    // Check if the email already exists in the database
+    const existingUser = await User.findOne({ email });
+    if (existingUser) {
+      return res.status(400).json({ message: 'Email already exists' });
+    }
+
+    const newUser = new User({ name, email, password });
     const user = await newUser.save();
-    NotificationService.sendEmail(
-      user.email,
-      'Welcome ',
-      'You are welcome to Mern Hotel Management'
-    );
+    // NotificationService.sendEmail(
+    //   user.email,
+    //   'Welcome',
+    //   'You are welcome to Mern Hotel Management'
+    // );
     res.send('User Registered Successfully');
   } catch (error) {
     return res.status(400).json({ message: error });
@@ -49,6 +57,7 @@ router.post('/getallusers', async (req, res) => {
 });
 
 router.post('/updateprofile', async (req, res) => {
+  console.log('IN update ');
   const { name, email, userId } = req.body;
   try {
     const user = await User.findOne({ _id: userId });
